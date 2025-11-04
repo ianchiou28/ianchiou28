@@ -19,12 +19,3 @@
   <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a>
 </p>
 
-## GitHub 统计
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=radical" alt="ianchiou28's GitHub stats" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&theme=radical" alt="ianchiou28's top languages" />
-</p>
