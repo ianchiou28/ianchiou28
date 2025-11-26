@@ -1,14 +1,7 @@
 # Hi there, I'm ianchiou28 👋
 
-## 关于我
-
-我主要关注于 **Python**、**前端**以及**API应用落地**。
-
-工作之余，我喜欢打**羽球**和**网球** 🏸🎾
-
-- 🔭 我目前正在做关于数字经济的相关应用和开发
-- 🌱 我目前正在学习数字经济，包含了计算机相关和经济学
-- 📫 如何联系我: ianchiou@icloud.com
+## Hi I'm Ian
+I work with Python, JavaScript, LLM, AI agent. I focus on finance-technonlogy, and AI for finnance. I studying in Nanjing University, my major is digital economics. In my free time, I like to playing babminton and tennis. Thank to read my profile, hope to collaborate with all of you  to make a better world.
 
 ## 我的技能
 
