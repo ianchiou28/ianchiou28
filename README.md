@@ -28,6 +28,24 @@
 ![GitHub User's stars](https://img.shields.io/github/stars/ianchiou28?style=for-the-badge&logo=github&color=7aa2f7&labelColor=1a1b27)
 ![Profile Views](https://komarev.com/ghpvc/?username=ianchiou28&style=for-the-badge&color=7aa2f7&labelColor=1a1b27)
 
+<br/><br/>
+
+<!-- GitHub Stats Card -->
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true"/>
+
+<!-- Top Languages Card -->
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&langs_count=8&theme=tokyonight&hide_border=true"/>
+
+<br/><br/>
+
+<!-- GitHub Streak Stats -->
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=ianchiou28&theme=tokyonight&hide_border=true" alt="GitHub Streak"/>
+
+<br/><br/>
+
+<!-- GitHub Profile Trophy -->
+<img src="https://github-profile-trophy.vercel.app/?username=ianchiou28&theme=tokyonight&no-frame=true&row=1&column=7" alt="Trophy"/>
+
 </div>
 
 <br/>
