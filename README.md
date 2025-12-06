@@ -23,10 +23,10 @@
 ### 📊 GitHub Stats
 
 <div align="center">
-  
-  ![ianchiou28's GitHub stats](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&hide_border=true)
-  
-  ![Top Langs](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&theme=tokyonight&hide_border=true&langs_count=8)
+
+![GitHub followers](https://img.shields.io/github/followers/ianchiou28?style=for-the-badge&logo=github&color=7aa2f7&labelColor=1a1b27)
+![GitHub User's stars](https://img.shields.io/github/stars/ianchiou28?style=for-the-badge&logo=github&color=7aa2f7&labelColor=1a1b27)
+![Profile Views](https://komarev.com/ghpvc/?username=ianchiou28&style=for-the-badge&color=7aa2f7&labelColor=1a1b27)
 
 </div>
 
