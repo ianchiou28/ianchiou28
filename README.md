@@ -23,8 +23,11 @@
 ### 📊 GitHub Stats
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true" height="180" alt="GitHub Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" height="180" alt="Top Languages" />
+  
+  ![ianchiou28's GitHub stats](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&hide_border=true)
+  
+  ![Top Langs](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&theme=tokyonight&hide_border=true&langs_count=8)
+
 </div>
 
 <br/>
@@ -70,21 +73,7 @@ current_focus: "Building Alpha with AI"
 ![Git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-</div>
 
-<br/>
-
-### 📈 Coding Activity
-
-<div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=ianchiou28&bg_color=1a1b27&color=7aa2f7&line=7aa2f7&point=c0caf5&area=true&hide_border=true" width="100%" />
-</div>
-
-<br/>
-
-<div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=ianchiou28&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
-</div>
 
 ---
 
