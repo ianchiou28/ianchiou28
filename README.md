@@ -20,12 +20,11 @@
 
 <hr/>
 
-### 🏆 Achievements
+### 📊 GitHub Stats
 
 <div align="center">
-  <a href="https://github.com/ryo-ma/github-profile-trophy">
-    <img src="https://github-profile-trophy.vercel.app/?username=ianchiou28&theme=tokyonight&no-frame=true&no-bg=true&margin-w=4" alt="ianchiou28" />
-  </a>
+  <img src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true" height="180" alt="GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" height="180" alt="Top Languages" />
 </div>
 
 <br/>
