@@ -31,15 +31,15 @@
 <br/><br/>
 
 <!-- GitHub Stats Card -->
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true"/>
+<img height="180em" src="https://github-readme-stats-sigma-five.vercel.app/api?username=ianchiou28&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true" alt="GitHub Stats"/>
 
 <!-- Top Languages Card -->
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&langs_count=8&theme=tokyonight&hide_border=true"/>
+<img height="180em" src="https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ianchiou28&layout=compact&langs_count=8&theme=tokyonight&hide_border=true" alt="Top Languages"/>
 
 <br/><br/>
 
 <!-- GitHub Streak Stats -->
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=ianchiou28&theme=tokyonight&hide_border=true" alt="GitHub Streak"/>
+<img src="https://streak-stats.demolab.com/?user=ianchiou28&theme=tokyonight&hide_border=true" alt="GitHub Streak"/>
 
 <br/><br/>
 
