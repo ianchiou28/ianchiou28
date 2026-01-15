@@ -6,8 +6,6 @@
 
   <br/>
 
-  <h3>🧬 LLM | 🤖 Agent | 📈 Finance</h3>
-  
   <p>
      Currently studying <b>Digital Economics</b> at <a href="https://www.nju.edu.cn/"><b>Nanjing University (NJU)</b></a>. <br/>
      I explore the intersection of <i>Artificial Intelligence</i> and <i>Financial Markets</i>.
