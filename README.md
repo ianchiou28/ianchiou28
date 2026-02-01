@@ -18,7 +18,7 @@
 
 <hr/>
 
-### 📊 GitHub Stats
+### GitHub Stats
 
 <div align="center">
 
@@ -38,7 +38,7 @@
 
 <br/>
 
-### 👨‍💻 About Me
+### About Me
 
 ```yaml
 name: Ian Chiou
