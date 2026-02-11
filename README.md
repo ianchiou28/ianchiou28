@@ -67,6 +67,14 @@ interests:
 
 
 <!-- Snake animation placeholder -->
+
+**2026 Contributions**
+![Snake animation 2026](https://raw.githubusercontent.com/ianchiou28/ianchiou28/output/github-contribution-grid-snake-dark-2026.svg)
+
+**2025 Contributions**
+![Snake animation 2025](https://raw.githubusercontent.com/ianchiou28/ianchiou28/output/github-contribution-grid-snake-dark-2025.svg)
+
+**All Time Contributions**
 ![Snake animation](https://raw.githubusercontent.com/ianchiou28/ianchiou28/output/github-contribution-grid-snake-dark.svg)
 
 ---
