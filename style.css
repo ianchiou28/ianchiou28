@@ -2,18 +2,107 @@
 
 /* ===== CSS Variables ===== */
 :root {
-    --deep-black: #0a0a0f;
-    --arcade-dark: #0d1117;
-    --primary: #ff6b35;
-    --primary-glow: #ff8c5a;
-    --neon-pink: #ff006e;
-    --neon-blue: #00f5ff;
-    --neon-green: #39ff14;
-    --neon-yellow: #ffff00;
-    --neon-purple: #bc13fe;
-    --cool-white: #ffffff;
-    --gray-text: #8b949e;
+    --deep-black: #fdfaf5; /* Soft warm ivory / background */
+    --arcade-dark: #f4efe6; /* Slightly darker warm beige / panels */
+    --primary: #ff7a33;
+    --primary-glow: #ff9b66;
+    --neon-pink: #ff4d79;
+    --neon-blue: #1c9cff;
+    --neon-green: #19a86b;
+    --neon-yellow: #ffb032;
+    --neon-purple: #6f6aff;
+    --cool-white: #2c2724; /* Espresso brown-black for text */
+    --gray-text: #7a6c65; /* Warm gray text */
+    
+    /* UI components */
+    --glass-bg: rgba(255, 255, 255, 0.74);
+    --glass-border: rgba(44, 39, 36, 0.14);
+    --glass-shadow: rgba(60, 40, 20, 0.08);
+    --glass-inset: rgba(255, 255, 255, 0.8);
+
+    --screen-bg: linear-gradient(145deg, #ffffff 0%, #f4efe6 100%);
+    --screen-border: #e6dfd1;
+    --screen-shadow: #f3efe5;
+    --screen-inner-shadow: rgba(160, 150, 140, 0.18);
+    --screen-outer-shadow: rgba(28, 156, 255, 0.12);
+
+    --row-bg: rgba(255, 255, 255, 0.6);
+    --row-border: rgba(44, 39, 36, 0.12);
+
+    --btn-bg: rgba(255, 255, 255, 0.7);
+    --btn-border: rgba(44, 39, 36, 0.22);
 }
+
+body.theme-dark {
+    --deep-black: #16181d;
+    --arcade-dark: #1f232b;
+    --cool-white: #fdfaf5;
+    --gray-text: #9ba3af;
+    
+    --glass-bg: rgba(25, 27, 34, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: rgba(0, 0, 0, 0.4);
+    --glass-inset: rgba(255, 255, 255, 0.05);
+
+    --screen-bg: linear-gradient(145deg, #1f232b 0%, #16181d 100%);
+    --screen-border: #2c323f;
+    --screen-shadow: #181b22;
+    --screen-inner-shadow: rgba(0, 0, 0, 0.5);
+    --screen-outer-shadow: rgba(44, 164, 255, 0.18);
+
+    --row-bg: rgba(31, 35, 43, 0.6);
+    --row-border: rgba(255, 255, 255, 0.08);
+
+    --btn-bg: rgba(31, 35, 43, 0.7);
+    --btn-border: rgba(255, 255, 255, 0.15);
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+body.theme-dark .arcade-light {
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(74, 125, 255, 0.2) 0%,
+        rgba(255, 102, 153, 0.12) 38%,
+        transparent 75%
+    );
+}
+
+body.theme-dark .scanlines {
+    opacity: 0.55;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(6, 16, 32, 0.14) 50%,
+        rgba(6, 16, 32, 0.14)
+    );
+    background-size: 100% 4px;
+}
+
+
+
+.theme-toggle-btn {
+      border: 1px solid var(--btn-border);
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--gray-text);
+      background: var(--btn-bg);
+      transition: all 0.2s ease;
+  }
+
+.theme-toggle-btn:hover {
+    border-color: rgba(122, 118, 255, 0.45);
+    color: var(--neon-purple);
+}
+
+
 
 /* ===== CRT Scanline Effect ===== */
 .scanlines {
@@ -26,13 +115,13 @@
         to bottom,
         rgba(255, 255, 255, 0),
         rgba(255, 255, 255, 0) 50%,
-        rgba(0, 0, 0, 0.1) 50%,
-        rgba(0, 0, 0, 0.1)
+        rgba(17, 34, 51, 0.02) 50%,
+        rgba(17, 34, 51, 0.02)
     );
     background-size: 100% 4px;
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.6;
+    opacity: 0.35;
 }
 
 /* ===== Arcade Ambient Light ===== */
@@ -44,8 +133,8 @@
     height: 200%;
     background: radial-gradient(
         circle at 50% 50%,
-        rgba(255, 107, 53, 0.08) 0%,
-        rgba(188, 19, 254, 0.05) 30%,
+        rgba(255, 138, 61, 0.16) 0%,
+        rgba(44, 164, 255, 0.1) 35%,
         transparent 70%
     );
     pointer-events: none;
@@ -66,24 +155,26 @@
 
 /* ===== Glass Arcade Card ===== */
 .glass-arcade {
-    background: rgba(13, 17, 23, 0.8);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+          0 12px 30px var(--glass-shadow),
+          inset 0 1px 0 var(--glass-inset);
+      transition: all 0.3s ease;
+  }
 
 /* ===== Arcade Screen ===== */
 .arcade-screen {
-    background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
-    border: 4px solid #21262d;
-    box-shadow: 
-        0 0 0 2px #30363d,
-        0 0 60px rgba(255, 107, 53, 0.3),
-        inset 0 0 100px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
+      background: var(--screen-bg);
+      border: 4px solid var(--screen-border);
+      box-shadow:
+          0 0 0 2px var(--screen-shadow),
+          0 0 56px var(--screen-outer-shadow),
+          inset 0 0 80px var(--screen-inner-shadow);
+      position: relative;
+      transition: all 0.3s ease;
+  }
 
 .screen-glow {
     position: absolute;
@@ -116,16 +207,16 @@
     position: relative;
     overflow: hidden;
     box-shadow: 
-        0 4px 0 #c44d20,
-        0 6px 20px rgba(255, 107, 53, 0.4);
+        0 4px 0 #e06a1f,
+        0 8px 20px rgba(255, 138, 61, 0.32);
     transition: all 0.1s;
 }
 
 .arcade-btn:active {
     transform: translateY(4px);
     box-shadow: 
-        0 0 0 #c44d20,
-        0 2px 10px rgba(255, 107, 53, 0.4);
+        0 0 0 #e06a1f,
+        0 2px 10px rgba(255, 138, 61, 0.28);
 }
 
 .arcade-btn::before {
@@ -160,10 +251,10 @@
 }
 
 .machine-top {
-    background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
+    background: var(--screen-bg);
     border-radius: 12px 12px 0 0;
     padding: 8px;
-    border: 2px solid #30363d;
+    border: 2px solid var(--screen-border);
     border-bottom: none;
     position: relative;
 }
@@ -194,8 +285,8 @@
 }
 
 .machine-screen {
-    background: #0d1117;
-    border: 3px solid #30363d;
+    background: var(--arcade-dark);
+    border: 3px solid var(--screen-border);
     border-top: none;
     position: relative;
     overflow: hidden;
@@ -220,8 +311,8 @@
 }
 
 .machine-controls {
-    background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
-    border: 3px solid #30363d;
+    background: var(--screen-bg);
+    border: 3px solid var(--screen-border);
     border-top: none;
     padding: 16px;
     border-radius: 0 0 8px 8px;
@@ -229,21 +320,21 @@
 
 .start-btn {
     box-shadow: 
-        0 4px 0 #238636,
-        0 6px 20px rgba(57, 255, 20, 0.3);
+        0 4px 0 #14804d,
+        0 6px 20px rgba(34, 181, 115, 0.28);
     transition: all 0.1s;
 }
 
 .start-btn:active {
     transform: translateY(4px);
     box-shadow: 
-        0 0 0 #238636,
-        0 2px 10px rgba(57, 255, 20, 0.3);
+        0 0 0 #14804d,
+        0 2px 10px rgba(34, 181, 115, 0.28);
 }
 
 .machine-base {
     height: 20px;
-    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    background: var(--screen-bg);
     border-radius: 0 0 12px 12px;
     margin-top: -2px;
 }
@@ -261,8 +352,70 @@
     transition: all 0.3s ease;
 }
 
+.game-preview-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(235, 242, 251, 0.88) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 14px 36px rgba(81, 108, 144, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
 .game-select-card:hover .game-preview {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 28px rgba(44, 164, 255, 0.2);
+}
+
+.score-filter-btn {
+    border: 1px solid rgba(31, 42, 55, 0.2);
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--gray-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    border-radius: 9999px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+}
+
+.score-filter-btn:hover {
+    border-color: rgba(44, 164, 255, 0.45);
+    color: var(--neon-blue);
+}
+
+.score-filter-btn.is-active {
+    color: #ffffff;
+    background: linear-gradient(120deg, var(--neon-blue), var(--neon-purple));
+    border-color: transparent;
+    box-shadow: 0 8px 18px rgba(122, 118, 255, 0.28);
+}
+
+#high-scores-board .score-row {
+      display: grid;
+      grid-template-columns: 56px 2fr 3fr auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--row-border);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--row-bg);
+      transition: all 0.3s ease;
+  }
+
+#high-scores-board .score-rank {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 11px;
+    text-align: center;
+}
+
+#high-scores-board .score-meta {
+    color: var(--gray-text);
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+#high-scores-board .score-value {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: var(--neon-yellow);
 }
 
 /* ===== Photo Slider - Square Style ===== */
@@ -293,14 +446,14 @@
     flex: 0 0 100%;
     scroll-snap-align: center;
     aspect-ratio: 1/1;
-    background: #1a1a1f;
-    border: 3px solid #30363d;
+    background: var(--glass-bg);
+    border: 3px solid var(--screen-border);
     border-radius: 12px;
     overflow: hidden;
     position: relative;
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
+        0 8px 26px rgba(88, 112, 145, 0.18),
+        0 0 0 1px rgba(255, 255, 255, 0.8);
 }
 
 .photo-slide img {
@@ -317,8 +470,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
-    border: 2px dashed #30363d;
+    background: var(--screen-bg);
+    border: 2px dashed var(--screen-border);
 }
 
 /* Slider Controls */
@@ -329,7 +482,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: rgba(13, 17, 23, 0.9);
+    background: rgba(255, 255, 255, 0.9);
     border: 2px solid var(--neon-pink);
     color: var(--neon-pink);
     font-size: 14px;
@@ -396,12 +549,8 @@
 }
 
 .nav-coin:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(31, 42, 55, 0.06);
     border-radius: 20px;
-}
-
-.insert-coin {
-    animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
@@ -438,7 +587,7 @@
 }
 
 #terminal-body::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(31, 42, 55, 0.12);
 }
 
 #terminal-body::-webkit-scrollbar-thumb {
@@ -463,9 +612,9 @@
 /* ===== Stats Monitor ===== */
 .stats-monitor {
     box-shadow: 
-        0 0 0 1px rgba(57, 255, 20, 0.3),
-        0 0 40px rgba(57, 255, 20, 0.1),
-        inset 0 0 60px rgba(57, 255, 20, 0.05);
+    0 0 0 1px rgba(34, 181, 115, 0.25),
+    0 0 40px rgba(34, 181, 115, 0.08),
+    inset 0 0 60px rgba(34, 181, 115, 0.05);
 }
 
 /* ===== Animations ===== */
@@ -489,7 +638,7 @@
 
 /* ===== Selection ===== */
 ::selection {
-    background: rgba(255, 107, 53, 0.3);
+    background: rgba(255, 138, 61, 0.3);
     color: var(--cool-white);
 }
 
@@ -499,7 +648,7 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--deep-black);
+    background: var(--screen-border);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -521,6 +670,9 @@ html {
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(8px) saturate(130%);
+    pointer-events: none;
 }
 
 /* ===== Mobile Optimizations ===== */

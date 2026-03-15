@@ -31,13 +31,276 @@ const gameInstructionsTitle = document.getElementById('game-title');
 const gameInstructionsDesc = document.getElementById('game-desc');
 const gameInstructionsControls = document.getElementById('game-controls');
 const startGameBtn = document.getElementById('start-game-btn');
+const highScoresBoardEl = document.getElementById('high-scores-board');
+const highScoreFiltersEl = document.getElementById('high-score-filters');
+const themeToggleBtn = document.getElementById('theme-toggle');
+const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+
+// ===== Theme Mode =====
+const THEME_STORAGE_KEY = 'arcadeThemeV1';
+
+function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    document.body.classList.toggle('theme-dark', isDark);
+
+    const label = isDark ? 'LIGHT MODE' : 'DARK MODE';
+    if (themeToggleBtn) themeToggleBtn.textContent = label;
+    if (themeToggleMobileBtn) themeToggleMobileBtn.textContent = label;
+}
+
+function initThemeToggle() {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+    applyTheme(savedTheme);
+
+    const onToggle = () => {
+        const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+        applyTheme(nextTheme);
+    };
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', onToggle);
+    }
+
+    if (themeToggleMobileBtn) {
+        themeToggleMobileBtn.addEventListener('click', onToggle);
+    }
+}
+
+// ===== High Score Database =====
+const HIGH_SCORE_STORAGE_KEY = 'arcadeHighScoresV1';
+const seedHighScores = [
+    { game: 'PACMAN', score: 1420, name: 'IAN', message: 'Ready Player One!', date: new Date(Date.now() - 5*24*60*60*1000).toISOString() },
+    { game: 'GUEST', score: '-', name: 'ALICE', message: '这背景音乐太复古了！爱了爱了', date: new Date(Date.now() - 4*24*60*60*1000).toISOString() },
+    { game: 'TETRIS', score: 1200, name: 'TREE', message: 'Nice website, bro.', date: new Date(Date.now() - 3*24*60*60*1000).toISOString() },
+    { game: 'GUEST', score: '-', name: 'BOB', message: '贪吃蛇怎么不能穿墙？提个建议', date: new Date(Date.now() - 2*24*60*60*1000).toISOString() },
+    { game: 'SNAKE', score: 980, name: 'AAA', message: '', date: '2026-03-08' },
+    { game: 'PACMAN', score: 870, name: 'GUEST', message: '', date: '2026-03-09' },
+    { game: 'TETRIS', score: 760, name: 'NOOB', message: '', date: '2026-03-07' }
+];
+
+let highScores = loadHighScores();
+let currentScoreFilter = 'GUEST';
+
+function loadHighScores() {
+    try {
+        const fromStorage = localStorage.getItem(HIGH_SCORE_STORAGE_KEY);
+        if (!fromStorage) {
+            return [...seedHighScores];
+        }
+
+        const parsed = JSON.parse(fromStorage);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+            return [...seedHighScores];
+        }
+
+        return parsed
+            .filter(item => item && item.game && Number.isFinite(item.score))
+            .map(item => ({
+                game: String(item.game).toUpperCase(),
+                score: Number(item.score),
+                date: item.date || new Date().toISOString().slice(0, 10)
+            }))
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 10);
+    } catch (error) {
+        return [...seedHighScores];
+    }
+}
+
+function saveHighScores() {
+    localStorage.setItem(HIGH_SCORE_STORAGE_KEY, JSON.stringify(highScores));
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const nameInput = document.getElementById('score-name-input');
+    const messageInput = document.getElementById('score-message-input');
+    const submitBtn = document.getElementById('score-submit-btn');
+
+    const gbNameInput = document.getElementById('guestbook-name-input');
+    const gbMessageInput = document.getElementById('guestbook-message-input');
+    const gbSubmitBtn = document.getElementById('guestbook-submit-btn');
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const playerName = nameInput.value.trim().toUpperCase() || 'AAA';
+            const playerMessage = messageInput.value.trim();
+
+            highScores.push({
+                game: currentScoreFilter === 'GUEST' ? 'GUEST' : currentScoreFilter,
+                score: '-',
+                name: playerName,
+                message: playerMessage,
+                date: new Date().toISOString()
+            });
+
+            highScores = highScores
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(0, 50);
+
+            saveHighScores();
+            renderHighScores();
+
+            if(nameInput) nameInput.value = '';
+            if(messageInput) messageInput.value = '';
+
+            submitBtn.textContent = '[ SUCCESS / 留言成功 ]';
+            setTimeout(() => {
+                submitBtn.textContent = '[ ADD RECORD / 提交留言 ]';
+            }, 2000);
+        });
+    }
+
+    if (gbSubmitBtn) {
+        gbSubmitBtn.addEventListener('click', () => {
+            const playerName = gbNameInput.value.trim().toUpperCase() || 'AAA';
+            const playerMessage = gbMessageInput.value.trim();
+
+            highScores.push({
+                game: 'GUEST',
+                score: '-',
+                name: playerName,
+                message: playerMessage,
+                date: new Date().toISOString()
+            });
+
+            highScores = highScores
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(0, 50);
+
+            saveHighScores();
+            renderHighScores();
+
+            if(gbNameInput) gbNameInput.value = '';
+            if(gbMessageInput) gbMessageInput.value = '';
+
+            gbSubmitBtn.textContent = '[ SUCCESS / 留言成功 ]';
+            setTimeout(() => {
+                gbSubmitBtn.textContent = '[ ADD RECORD / 提交留言 ]';
+            }, 2000);
+        });
+    }
+});
+
+
+function renderHighScores() {
+    if (!highScoresBoardEl) return;
+
+    
+    const filteredScores = highScores.filter(record => record.game === currentScoreFilter);
+
+    // If it's a game, sort by score descending. If it's GUEST, keep date descending.
+    if (currentScoreFilter !== 'GUEST') {
+        filteredScores.sort((a, b) => b.score - a.score);
+    } else {
+        filteredScores.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
+
+    renderStickyNotes();
+    if (!filteredScores.length) {
+        highScoresBoardEl.innerHTML = '<div class="text-xs text-gray-text font-mono">暂无记录，先去打一局吧。</div>';
+        return;
+    }
+
+    const rankColor = (rank) => {
+        if (rank === 1) return 'text-neon-yellow';
+        if (rank === 2) return 'text-neon-blue';
+        if (rank === 3) return 'text-neon-pink';
+        return 'text-gray-text';
+    };
+
+    highScoresBoardEl.innerHTML = filteredScores
+        .map((record, index) => {
+            const rank = index + 1;
+            return `
+                <div class="score-row">
+                    <div class="score-rank ${rankColor(rank)}">#${rank}</div>   
+                    <div>
+                        <div class="font-pixel text-xs text-cool-white">${record.game}</div>
+                        <div class="score-meta">DATE </div>       
+                    </div>
+                    <div class="flex flex-col gap-1 overflow-hidden">
+                        <div class="font-mono text-xs text-neon-blue truncate">${record.name || 'ANON'}</div>
+                        <div class="font-mono text-[10px] text-gray-text truncate">${record.message || '-'}</div>
+                    </div>
+                    <div class="score-value">${record.score === '-' ? '<span class="text-xs text-gray-500">留言</span>' : record.score}</div>
+                </div>
+            `;
+        })
+        .join('');
+    
+    
+}
+
+
+function renderStickyNotes() {
+    const wall = document.getElementById('sticky-notes-wall');
+    if (!wall) return;
+
+    // Filter to only entries with actual messages (not default)
+    const notes = highScores.filter(r => r.message && r.message.trim() !== '' && r.message !== '-' && r.message !== 'No message left.');
+
+    if (notes.length === 0) {
+        wall.innerHTML = '<div class="text-gray-text font-mono text-xs opacity-50">还没有人留下小纸条...</div>';
+        return;
+    }
+
+    const colors = [
+        'bg-yellow-200 text-yellow-900 shadow-[2px_4px_10px_rgba(253,224,71,0.3)]', 
+        'bg-pink-200 text-pink-900 shadow-[2px_4px_10px_rgba(249,168,212,0.3)]', 
+        'bg-green-200 text-green-900 shadow-[2px_4px_10px_rgba(134,239,172,0.3)]', 
+        'bg-blue-200 text-blue-900 shadow-[2px_4px_10px_rgba(147,197,253,0.3)]',
+        'bg-purple-200 text-purple-900 shadow-[2px_4px_10px_rgba(216,180,254,0.3)]'
+    ];
+
+    // Shuffle and pick elements for display
+    wall.innerHTML = notes.map((record, i) => {
+        // Randomly tilt between -8deg and +8deg
+        const tilt = (Math.random() * 16 - 8).toFixed(1);
+        const colorClass = colors[i % colors.length];
+        // Random slight vertical offset
+        const yOffset = (Math.random() * 20 - 10).toFixed(1);
+
+        return `
+            <div 
+                class="w-48 min-h-[140px] p-4 flex flex-col justify-between transition-transform duration-300 hover:scale-110 hover:z-20 cursor-default rounded-sm relative ${colorClass}"
+                style="transform: rotate(${tilt}deg) translateY(${yOffset}px);"
+            >
+                <!-- Tape effect at the top -->
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-6 bg-white/40 backdrop-blur-sm shadow-sm rotate-2"></div>
+                
+                <p class="font-sans text-sm font-semibold leading-relaxed break-words">"${record.message}"</p>
+                <div class="mt-4 pt-2 border-t border-black/10 flex justify-between items-center">
+                    <span class="font-mono text-xs font-bold font-pixel">${record.name || 'ANON'}</span>
+                    <span class="text-[10px] opacity-60">${record.game}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function initHighScoreFilters() {
+    if (!highScoreFiltersEl) return;
+
+    const buttons = highScoreFiltersEl.querySelectorAll('.score-filter-btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            currentScoreFilter = button.dataset.game || 'GUEST';
+            buttons.forEach(btn => btn.classList.remove('is-active'));
+            button.classList.add('is-active');
+            renderHighScores();
+        });
+    });
+}
 
 // ===== Typewriter Effect =====
 const typewriterTexts = [
     'PLAYER 1 READY',
-    'INSERT COIN',
     'GAME START',
-    'PRESS START'
+    'PRESS START',
+    'FREE PLAY'
 ];
 let typewriterIndex = 0;
 let charIndex = 0;
@@ -186,6 +449,7 @@ class GameEngine {
         this.canvas = gameCanvas;
         this.ctx = this.canvas.getContext('2d');
         this.currentGame = null;
+        this.currentGameInstance = null;
         this.isRunning = false;
         this.score = 0;
         this.level = 1;
@@ -196,8 +460,13 @@ class GameEngine {
     }
     
     resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        if (this.canvas.parentElement && this.canvas.parentElement.clientWidth > 0) {
+            this.canvas.width = this.canvas.parentElement.clientWidth;
+            this.canvas.height = this.canvas.parentElement.clientHeight;
+        } else {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
     }
     
     start(gameType) {
@@ -207,21 +476,32 @@ class GameEngine {
         this.level = 1;
         this.isRunning = true;
         
+        const overlay = document.getElementById('game-overlay');
+        if(overlay) { overlay.classList.remove('hidden'); overlay.classList.add('flex'); }
         this.canvas.classList.remove('hidden');
         gameUI.classList.remove('hidden');
+        // Resize after displaying so clientWidth is correct
+        this.resize();
         gameUI.classList.add('flex');
         this.updateUI();
+
+        let instance = null;
         
         switch(gameType) {
             case 'snake':
-                new SnakeGame(this).start();
+                instance = new SnakeGame(this);
                 break;
             case 'tetris':
-                new TetrisGame(this).start();
+                instance = new TetrisGame(this);
                 break;
             case 'pacman':
-                new PacmanGame(this).start();
+                instance = new PacmanGame(this);
                 break;
+        }
+
+        this.currentGameInstance = instance;
+        if (this.currentGameInstance) {
+            this.currentGameInstance.start();
         }
     }
     
@@ -231,6 +511,14 @@ class GameEngine {
             clearInterval(this.gameLoop);
             this.gameLoop = null;
         }
+
+        if (this.currentGameInstance && typeof this.currentGameInstance.cleanup === 'function') {
+            this.currentGameInstance.cleanup();
+        }
+
+        this.currentGameInstance = null;
+        const overlay = document.getElementById('game-overlay');
+        if(overlay) { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }
         this.canvas.classList.add('hidden');
         gameUI.classList.add('hidden');
         gameUI.classList.remove('flex');
@@ -268,7 +556,7 @@ class SnakeGame {
         this.direction = {x: 1, y: 0};
         this.nextDirection = {x: 1, y: 0};
         this.food = null;
-        this.speed = 100;
+        this.speed = 200;
         this.foodEmojis = ['🍎', '💰', '📈', '🏦', '💎', '🎯', '🚀', '⭐'];
         this.currentEmoji = '🍎';
         
@@ -282,7 +570,7 @@ class SnakeGame {
         this.direction = {x: 1, y: 0};
         this.nextDirection = {x: 1, y: 0};
         this.food = this.generateFood();
-        this.speed = 100;
+        this.speed = 200;
         
         document.addEventListener('keydown', this.handleKeydown);
         exitGameBtn.onclick = () => this.engine.stop();
@@ -365,7 +653,7 @@ class SnakeGame {
             this.engine.addScore(10);
             this.food = this.generateFood();
             
-            if (this.speed > 50) {
+            if (this.speed > 80) {
                 this.speed -= 2;
                 clearInterval(this.engine.gameLoop);
                 this.engine.gameLoop = setInterval(() => this.update(), this.speed);
@@ -378,8 +666,7 @@ class SnakeGame {
     }
     
     draw() {
-        this.ctx.fillStyle = 'rgba(10, 10, 15, 0.3)';
-        this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
+        this.ctx.clearRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
         this.snake.forEach((segment, index) => {
             const x = segment.x * this.gridSize;
@@ -417,6 +704,7 @@ class SnakeGame {
     gameOver() {
         clearInterval(this.engine.gameLoop);
         document.removeEventListener('keydown', this.handleKeydown);
+        
         
         this.ctx.fillStyle = 'rgba(10, 10, 15, 0.9)';
         this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
@@ -625,8 +913,7 @@ class TetrisGame {
     }
     
     draw() {
-        this.ctx.fillStyle = '#0a0a0f';
-        this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
+        this.ctx.clearRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
         const offsetX = (this.engine.canvas.width - this.boardWidth * this.blockSize) / 2;
         const offsetY = (this.engine.canvas.height - this.boardHeight * this.blockSize) / 2;
@@ -674,6 +961,7 @@ class TetrisGame {
         this.engine.isRunning = false;
         document.removeEventListener('keydown', this.handleKeydown);
         
+        
         this.ctx.fillStyle = 'rgba(10, 10, 15, 0.9)';
         this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
@@ -702,12 +990,20 @@ class PacmanGame {
         this.engine = engine;
         this.ctx = engine.ctx;
         this.tileSize = 25;
-        this.pacman = { x: 1, y: 1, direction: 0 };
+        this.pacman = { x: 1, y: 1, direction: 0, currentDirection: 0, nextDirection: 0 };
         this.ghosts = [];
         this.dots = [];
         this.powerPellets = [];
-        this.score = 0;
         this.speed = 150;
+        this.restartHandler = null;
+        this.tick = 0;
+        this.scatterTargets = null;
+        this.directions = [
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 },
+            { x: 0, y: -1 }
+        ];
         
         this.maze = [
             "############################",
@@ -745,15 +1041,30 @@ class PacmanGame {
         
         this.handleKeydown = this.handleKeydown.bind(this);
     }
+
+    get mazeWidth() {
+        return this.maze[0].length;
+    }
+
+    get mazeHeight() {
+        return this.maze.length;
+    }
     
     start() {
         this.parseMaze();
-        this.pacman = { x: 13, y: 23, direction: 0 };
+        this.tick = 0;
+        this.scatterTargets = {
+            blinky: { x: this.mazeWidth - 2, y: 0 },
+            pinky: { x: 1, y: 0 },
+            inky: { x: this.mazeWidth - 2, y: this.mazeHeight - 1 },
+            clyde: { x: 1, y: this.mazeHeight - 1 }
+        };
+        this.pacman = { x: 13, y: 23, direction: 0, currentDirection: 0, nextDirection: 0 };
         this.ghosts = [
-            { x: 13, y: 11, color: '#ff0000', name: 'blinky' },
-            { x: 12, y: 13, color: '#ffb8ff', name: 'pinky' },
-            { x: 13, y: 13, color: '#00ffff', name: 'inky' },
-            { x: 14, y: 13, color: '#ffb852', name: 'clyde' }
+            { x: 13, y: 11, color: '#ff0000', name: 'blinky', direction: 0 },
+            { x: 12, y: 13, color: '#ffb8ff', name: 'pinky', direction: 2 },
+            { x: 13, y: 13, color: '#00ffff', name: 'inky', direction: 1 },
+            { x: 14, y: 13, color: '#ffb852', name: 'clyde', direction: 3 }
         ];
         
         document.addEventListener('keydown', this.handleKeydown);
@@ -761,6 +1072,14 @@ class PacmanGame {
         
         this.engine.gameLoop = setInterval(() => this.update(), this.speed);
         this.draw();
+    }
+
+    cleanup() {
+        document.removeEventListener('keydown', this.handleKeydown);
+        if (this.restartHandler) {
+            document.removeEventListener('keydown', this.restartHandler);
+            this.restartHandler = null;
+        }
     }
     
     parseMaze() {
@@ -779,7 +1098,7 @@ class PacmanGame {
     }
     
     handleKeydown(e) {
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
             e.preventDefault();
         }
         
@@ -788,57 +1107,163 @@ class PacmanGame {
             return;
         }
         
-        const newX = this.pacman.x;
-        const newY = this.pacman.y;
-        
         switch(e.key) {
             case 'ArrowUp':
             case 'w':
-                if (this.canMove(newX, newY - 1)) this.pacman.y--;
-                this.pacman.direction = 3;
+                this.pacman.nextDirection = 3;
                 break;
             case 'ArrowDown':
             case 's':
-                if (this.canMove(newX, newY + 1)) this.pacman.y++;
-                this.pacman.direction = 1;
+                this.pacman.nextDirection = 1;
                 break;
             case 'ArrowLeft':
             case 'a':
-                if (this.canMove(newX - 1, newY)) this.pacman.x--;
-                this.pacman.direction = 2;
+                this.pacman.nextDirection = 2;
                 break;
             case 'ArrowRight':
             case 'd':
-                if (this.canMove(newX + 1, newY)) this.pacman.x++;
-                this.pacman.direction = 0;
+                this.pacman.nextDirection = 0;
                 break;
         }
-        
-        if (this.pacman.x < 0) this.pacman.x = this.maze[0].length - 1;
-        if (this.pacman.x >= this.maze[0].length) this.pacman.x = 0;
     }
-    
+
+    normalizeX(x) {
+        if (x < 0) return this.maze[0].length - 1;
+        if (x >= this.maze[0].length) return 0;
+        return x;
+    }
+
     canMove(x, y) {
         if (y < 0 || y >= this.maze.length) return false;
-        if (x < 0 || x >= this.maze[y].length) return false;
-        return this.maze[y][x] !== '#';
+        const normalizedX = this.normalizeX(x);
+        return this.maze[y][normalizedX] !== '#';
+    }
+
+    moveEntity(entity, direction) {
+        const movement = this.directions[direction];
+        const nextX = this.normalizeX(entity.x + movement.x);
+        const nextY = entity.y + movement.y;
+
+        if (!this.canMove(nextX, nextY)) {
+            return false;
+        }
+
+        entity.x = nextX;
+        entity.y = nextY;
+        entity.direction = direction;
+        return true;
+    }
+
+    movePacman() {
+        if (this.moveEntity(this.pacman, this.pacman.nextDirection)) {
+            this.pacman.currentDirection = this.pacman.nextDirection;
+            return;
+        }
+
+        this.moveEntity(this.pacman, this.pacman.currentDirection);
+    }
+
+    getTileAhead(origin, direction, steps = 4) {
+        let x = origin.x;
+        let y = origin.y;
+
+        for (let i = 0; i < steps; i++) {
+            const movement = this.directions[direction];
+            x = this.normalizeX(x + movement.x);
+            y += movement.y;
+            if (!this.canMove(x, y)) {
+                break;
+            }
+        }
+
+        return { x, y };
+    }
+
+    getMode() {
+        const cycle = this.tick % 220;
+        return cycle < 45 ? 'scatter' : 'chase';
+    }
+
+    ghostTarget(ghost) {
+        const mode = this.getMode();
+
+        if (mode === 'scatter') {
+            return this.scatterTargets[ghost.name] || { x: this.pacman.x, y: this.pacman.y };
+        }
+
+        if (ghost.name === 'blinky') {
+            return { x: this.pacman.x, y: this.pacman.y };
+        }
+
+        if (ghost.name === 'pinky') {
+            return this.getTileAhead(this.pacman, this.pacman.currentDirection, 4);
+        }
+
+        if (ghost.name === 'inky') {
+            const blinky = this.ghosts.find(g => g.name === 'blinky') || ghost;
+            const pacmanAhead = this.getTileAhead(this.pacman, this.pacman.currentDirection, 2);
+            const vx = pacmanAhead.x - blinky.x;
+            const vy = pacmanAhead.y - blinky.y;
+            return {
+                x: this.normalizeX(pacmanAhead.x + vx),
+                y: pacmanAhead.y + vy
+            };
+        }
+
+        if (ghost.name === 'clyde') {
+            const distance = Math.abs(ghost.x - this.pacman.x) + Math.abs(ghost.y - this.pacman.y);
+            if (distance > 8) {
+                return { x: this.pacman.x, y: this.pacman.y };
+            }
+            return this.scatterTargets.clyde;
+        }
+
+        return { x: this.pacman.x, y: this.pacman.y };
+    }
+
+    moveGhost(ghost) {
+        const reverseDirection = (ghost.direction + 2) % 4;
+        let possibleDirections = [];
+
+        for (let direction = 0; direction < this.directions.length; direction++) {
+            const movement = this.directions[direction];
+            const nextX = this.normalizeX(ghost.x + movement.x);
+            const nextY = ghost.y + movement.y;
+            if (this.canMove(nextX, nextY)) {
+                possibleDirections.push(direction);
+            }
+        }
+
+        if (possibleDirections.length > 1) {
+            possibleDirections = possibleDirections.filter(direction => direction !== reverseDirection);
+        }
+
+        if (!possibleDirections.length) {
+            return;
+        }
+
+        const target = this.ghostTarget(ghost);
+        let chosenDirection = possibleDirections[0];
+        let bestDistance = Infinity;
+
+        possibleDirections.forEach(direction => {
+            const movement = this.directions[direction];
+            const candidateX = this.normalizeX(ghost.x + movement.x);
+            const candidateY = ghost.y + movement.y;
+            const distance = Math.abs(candidateX - target.x) + Math.abs(candidateY - target.y);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                chosenDirection = direction;
+            }
+        });
+
+        this.moveEntity(ghost, chosenDirection);
     }
     
     update() {
-        this.ghosts.forEach(ghost => {
-            const directions = [
-                { x: 1, y: 0 }, { x: -1, y: 0 },
-                { x: 0, y: 1 }, { x: 0, y: -1 }
-            ];
-            const dir = directions[Math.floor(Math.random() * directions.length)];
-            const newX = ghost.x + dir.x;
-            const newY = ghost.y + dir.y;
-            
-            if (this.canMove(newX, newY)) {
-                ghost.x = newX;
-                ghost.y = newY;
-            }
-        });
+        this.tick++;
+        this.movePacman();
+        this.ghosts.forEach(ghost => this.moveGhost(ghost));
         
         if (this.ghosts.some(g => g.x === this.pacman.x && g.y === this.pacman.y)) {
             this.gameOver();
@@ -866,8 +1291,7 @@ class PacmanGame {
     }
     
     draw() {
-        this.ctx.fillStyle = '#0a0a0f';
-        this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
+        this.ctx.clearRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
         const offsetX = (this.engine.canvas.width - this.maze[0].length * this.tileSize) / 2;
         const offsetY = (this.engine.canvas.height - this.maze.length * this.tileSize) / 2;
@@ -957,9 +1381,11 @@ class PacmanGame {
     
     win() {
         clearInterval(this.engine.gameLoop);
-        document.removeEventListener('keydown', this.handleKeydown);
+        this.engine.isRunning = false;
+        this.cleanup();
         
-        this.ctx.fillStyle = 'rgba(10, 10, 15, 0.9)';
+        
+        this.ctx.fillStyle = 'rgba(10, 10, 15, 0.82)';
         this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
         this.ctx.fillStyle = '#39ff14';
@@ -970,13 +1396,23 @@ class PacmanGame {
         this.ctx.font = '24px "Space Grotesk"';
         this.ctx.fillStyle = '#ffffff';
         this.ctx.fillText(`FINAL SCORE: ${this.engine.score}`, this.engine.canvas.width / 2, this.engine.canvas.height / 2 + 20);
+        this.restartHandler = (e) => {
+            if (e.key === ' ') {
+                document.removeEventListener('keydown', this.restartHandler);
+                this.restartHandler = null;
+                this.engine.start('pacman');
+            }
+        };
+        document.addEventListener('keydown', this.restartHandler);
     }
     
     gameOver() {
         clearInterval(this.engine.gameLoop);
-        document.removeEventListener('keydown', this.handleKeydown);
+        this.engine.isRunning = false;
+        this.cleanup();
         
-        this.ctx.fillStyle = 'rgba(10, 10, 15, 0.9)';
+        
+        this.ctx.fillStyle = 'rgba(10, 10, 15, 0.82)';
         this.ctx.fillRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
         
         this.ctx.fillStyle = '#ff006e';
@@ -988,13 +1424,14 @@ class PacmanGame {
         this.ctx.fillStyle = '#ffffff';
         this.ctx.fillText(`SCORE: ${this.engine.score}`, this.engine.canvas.width / 2, this.engine.canvas.height / 2 + 20);
         
-        const restartHandler = (e) => {
+        this.restartHandler = (e) => {
             if (e.key === ' ') {
-                document.removeEventListener('keydown', restartHandler);
+                document.removeEventListener('keydown', this.restartHandler);
+                this.restartHandler = null;
                 this.engine.start('pacman');
             }
         };
-        document.addEventListener('keydown', restartHandler);
+        document.addEventListener('keydown', this.restartHandler);
     }
 }
 
@@ -1020,9 +1457,9 @@ function startTetrisGame() {
 
 function startPacmanGame() {
     showGameInstructions('pacman', '👾', 'PACMAN', '经典吃豆人', [
-        '方向键 / WASD - 移动',
+        '方向键 / WASD - 设定方向后持续移动',
         'ESC - 退出游戏',
-        '吃掉所有豆子获胜，避开幽灵'
+        '吃掉所有豆子获胜，幽灵会主动追击'
     ]);
 }
 
@@ -1089,7 +1526,7 @@ GitHub:   <span class="text-neon-blue">github.com/ianchiou28</span>
 Org:      <span class="text-neon-purple">github.com/Lingsio</span>
 Website:  <span class="text-primary">http://www.finai.org.cn/</span>
 
-<span class="text-neon-green">INSERT COIN TO CONTINUE...</span>`,
+<span class="text-neon-green">READY TO CONNECT...</span>`,
     
     photos: () => {
         document.getElementById('photos').scrollIntoView({ behavior: 'smooth' });
@@ -1167,8 +1604,11 @@ function handleTerminalCommand(command) {
 
 // ===== Initialization =====
 document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
     typeWriter();
     renderPhotoGallery();
+    initHighScoreFilters();
+    renderHighScores();
     
     terminalBtn.addEventListener('click', openTerminal);
     closeTerminal.addEventListener('click', closeTerminalModal);
@@ -1216,3 +1656,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+// ===== BOOT SEQUENCE =====
+function runBootSequence() {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    if (!bootScreen || !bootText) return;
+
+    const logs = [
+        "BIOS DATE 03/15/26 14:22:15 VER 1.00",
+        "CPU: IAN-ARCADE-CORE 3.0GHz",
+        "Memory Test: 1048576K OK",
+        "",
+        "Loading system drivers...",
+        "OK.",
+        "Initializing Game State...",
+        "OK.",
+        "Mounting File System...",
+        "OK.",
+        "Loading Guestbook module...",
+        "OK.",
+        "",
+        "SYSTEM READY.",
+        "PRESS START TO CONTINUE..."
+    ];
+
+    let lineIndex = 0;
+    
+    function addLog() {
+        if (lineIndex < logs.length) {
+            bootText.textContent += logs[lineIndex] + "\n";
+            lineIndex++;
+            setTimeout(addLog, Math.random() * 150 + 50);
+        } else {
+            setTimeout(() => {
+                bootScreen.style.opacity = '0';
+                setTimeout(() => bootScreen.remove(), 1000);
+            }, 800);
+        }
+    }
+    
+    setTimeout(addLog, 500);
+}
+document.addEventListener('DOMContentLoaded', runBootSequence);
