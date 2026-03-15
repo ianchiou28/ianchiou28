@@ -1,0 +1,564 @@
+/* ARCADE THEME - Ian Chiou Portfolio */
+
+/* ===== CSS Variables ===== */
+:root {
+    --deep-black: #0a0a0f;
+    --arcade-dark: #0d1117;
+    --primary: #ff6b35;
+    --primary-glow: #ff8c5a;
+    --neon-pink: #ff006e;
+    --neon-blue: #00f5ff;
+    --neon-green: #39ff14;
+    --neon-yellow: #ffff00;
+    --neon-purple: #bc13fe;
+    --cool-white: #ffffff;
+    --gray-text: #8b949e;
+}
+
+/* ===== CRT Scanline Effect ===== */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.1)
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.6;
+}
+
+/* ===== Arcade Ambient Light ===== */
+.arcade-light {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 107, 53, 0.08) 0%,
+        rgba(188, 19, 254, 0.05) 30%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: -1;
+    animation: ambient-pulse 8s ease-in-out infinite;
+}
+
+@keyframes ambient-pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* ===== Glass Arcade Card ===== */
+.glass-arcade {
+    background: rgba(13, 17, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ===== Arcade Screen ===== */
+.arcade-screen {
+    background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+    border: 4px solid #21262d;
+    box-shadow: 
+        0 0 0 2px #30363d,
+        0 0 60px rgba(255, 107, 53, 0.3),
+        inset 0 0 100px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.screen-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--primary), var(--neon-blue), var(--neon-pink));
+    border-radius: inherit;
+    opacity: 0.3;
+    filter: blur(20px);
+    z-index: -1;
+    animation: screen-flicker 4s ease-in-out infinite;
+}
+
+@keyframes screen-flicker {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    52% {
+        opacity: 0.3;
+    }
+    54% {
+        opacity: 0.5;
+    }
+}
+
+/* ===== Arcade Button ===== */
+.arcade-btn {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 0 #c44d20,
+        0 6px 20px rgba(255, 107, 53, 0.4);
+    transition: all 0.1s;
+}
+
+.arcade-btn:active {
+    transform: translateY(4px);
+    box-shadow: 
+        0 0 0 #c44d20,
+        0 2px 10px rgba(255, 107, 53, 0.4);
+}
+
+.arcade-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.arcade-btn:hover::before {
+    left: 100%;
+}
+
+/* ===== Arcade Machine ===== */
+.arcade-machine {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.arcade-machine:hover {
+    transform: translateY(-8px);
+}
+
+.machine-top {
+    background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
+    border-radius: 12px 12px 0 0;
+    padding: 8px;
+    border: 2px solid #30363d;
+    border-bottom: none;
+    position: relative;
+}
+
+.marquee-light {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-pink), var(--primary), var(--neon-yellow), var(--neon-blue), var(--neon-purple));
+    animation: marquee-glow 2s linear infinite;
+    background-size: 200% 100%;
+}
+
+@keyframes marquee-glow {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.marquee-text {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px var(--neon-yellow);
+}
+
+.machine-screen {
+    background: #0d1117;
+    border: 3px solid #30363d;
+    border-top: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.machine-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.2) 100%
+    );
+    pointer-events: none;
+}
+
+.screen-content {
+    position: relative;
+    z-index: 1;
+}
+
+.machine-controls {
+    background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
+    border: 3px solid #30363d;
+    border-top: none;
+    padding: 16px;
+    border-radius: 0 0 8px 8px;
+}
+
+.start-btn {
+    box-shadow: 
+        0 4px 0 #238636,
+        0 6px 20px rgba(57, 255, 20, 0.3);
+    transition: all 0.1s;
+}
+
+.start-btn:active {
+    transform: translateY(4px);
+    box-shadow: 
+        0 0 0 #238636,
+        0 2px 10px rgba(57, 255, 20, 0.3);
+}
+
+.machine-base {
+    height: 20px;
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    border-radius: 0 0 12px 12px;
+    margin-top: -2px;
+}
+
+/* ===== Game Select Card ===== */
+.game-select-card {
+    transition: transform 0.3s ease;
+}
+
+.game-select-card:hover {
+    transform: scale(1.05);
+}
+
+.game-preview {
+    transition: all 0.3s ease;
+}
+
+.game-select-card:hover .game-preview {
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Photo Slider - Square Style ===== */
+.photo-slider-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 60px;
+}
+
+.photo-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.photo-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.photo-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    aspect-ratio: 1/1;
+    background: #1a1a1f;
+    border: 3px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.photo-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-slide-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+    border: 2px dashed #30363d;
+}
+
+/* Slider Controls */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(13, 17, 23, 0.9);
+    border: 2px solid var(--neon-pink);
+    color: var(--neon-pink);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.slider-btn:hover {
+    background: var(--neon-pink);
+    color: var(--deep-black);
+    box-shadow: 0 0 20px var(--neon-pink);
+}
+
+.slider-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.slider-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.slider-prev {
+    left: 0;
+}
+
+.slider-next {
+    right: 0;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .photo-slider-container {
+        padding: 0 40px;
+        max-width: 100%;
+    }
+    
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+    }
+}
+
+/* Swipe Hint Animation */
+@keyframes swipe-hint {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+}
+
+/* ===== Navigation Coin Effect ===== */
+.nav-coin {
+    position: relative;
+    padding: 4px 12px;
+    transition: all 0.3s;
+}
+
+.nav-coin:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+}
+
+.insert-coin {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ===== Skill Node ===== */
+.skill-node {
+    transition: all 0.3s ease;
+}
+
+.skill-node:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 245, 255, 0.2);
+}
+
+/* ===== Social Coin ===== */
+.social-coin {
+    transition: all 0.3s ease;
+}
+
+.social-coin:hover {
+    box-shadow: 0 0 30px currentColor;
+}
+
+/* ===== Terminal Styles ===== */
+#terminal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#terminal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#terminal-body::-webkit-scrollbar-thumb {
+    background: var(--neon-green);
+    border-radius: 4px;
+}
+
+.terminal-line {
+    margin-bottom: 4px;
+    animation: fade-in 0.1s ease;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===== Stats Monitor ===== */
+.stats-monitor {
+    box-shadow: 
+        0 0 0 1px rgba(57, 255, 20, 0.3),
+        0 0 40px rgba(57, 255, 20, 0.1),
+        inset 0 0 60px rgba(57, 255, 20, 0.05);
+}
+
+/* ===== Animations ===== */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+    }
+}
+
+/* ===== Selection ===== */
+::selection {
+    background: rgba(255, 107, 53, 0.3);
+    color: var(--cool-white);
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--deep-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary), var(--neon-blue));
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--primary-glow), var(--neon-blue));
+}
+
+/* ===== Smooth Scroll ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== Game Canvas ===== */
+#game-canvas {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* ===== Mobile Optimizations ===== */
+@media (max-width: 768px) {
+    .font-pixel {
+        font-size: 0.6em;
+    }
+    
+    .arcade-screen {
+        padding: 2rem;
+    }
+    
+    .scanlines {
+        opacity: 0.3;
+    }
+    
+    .photo-wall-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 10px;
+    }
+    
+    .photo-polaroid {
+        padding: 8px 8px 32px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .photo-wall-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+    .scanlines,
+    .arcade-light,
+    #terminal-btn {
+        display: none !important;
+    }
+}

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ian Chiou | THE ARCADE</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-black': '#0a0a0f',
+                        'arcade-dark': '#0d1117',
+                        'primary': '#ff6b35',
+                        'primary-glow': '#ff8c5a',
+                        'neon-pink': '#ff006e',
+                        'neon-blue': '#00f5ff',
+                        'neon-green': '#39ff14',
+                        'neon-yellow': '#ffff00',
+                        'neon-purple': '#bc13fe',
+                        'cool-white': '#ffffff',
+                        'gray-text': '#8b949e'
+                    },
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'pixel': ['Press Start 2P', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-deep-black text-cool-white font-space overflow-x-hidden">
+
+    <!-- CRT Scanline Effect -->
+    <div class="scanlines"></div>
+    
+    <!-- Arcade Ambient Light -->
+    <div class="arcade-light"></div>
+
+    <!-- Navigation - Arcade Style -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-arcade rounded-2xl px-6 py-3">
+            <a href="#" class="font-pixel text-lg text-primary hover:text-primary-glow transition-colors tracking-wider">
+                <span class="animate-pulse">▶</span> IAN.ARCADE
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#machines" class="nav-coin text-sm text-gray-text hover:text-neon-green transition-colors">投币口</a>
+                <a href="#about" class="nav-coin text-sm text-gray-text hover:text-neon-blue transition-colors">玩家档案</a>
+                <a href="#photos" class="nav-coin text-sm text-gray-text hover:text-neon-purple transition-colors">相册</a>
+                <a href="#arcade" class="nav-coin text-sm text-gray-text hover:text-neon-pink transition-colors">游戏厅</a>
+                <div class="insert-coin animate-blink text-primary font-pixel text-xs">INSERT COIN</div>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-cool-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden mt-2 glass-arcade rounded-xl mx-2 p-4">
+            <a href="#machines" class="block py-2 text-gray-text hover:text-neon-green">投币口</a>
+            <a href="#about" class="block py-2 text-gray-text hover:text-neon-blue">玩家档案</a>
+            <a href="#photos" class="block py-2 text-gray-text hover:text-neon-purple">相册</a>
+            <a href="#arcade" class="block py-2 text-gray-text hover:text-neon-pink">游戏厅</a>
+        </div>
+    </nav>
+
+    <!-- Hero - Arcade Screen -->
+    <section class="min-h-screen flex items-center justify-center relative pt-20 px-4">
+        <div class="arcade-screen max-w-5xl mx-auto p-8 md:p-16 rounded-3xl relative overflow-hidden">
+            <!-- Screen Glow -->
+            <div class="screen-glow"></div>
+            
+            <div class="relative z-10 text-center">
+                <div class="mb-8">
+                    <span class="inline-block px-4 py-2 rounded-lg bg-neon-green/10 border border-neon-green/30 text-neon-green font-mono text-xs tracking-widest">
+                        PRESS START
+                    </span>
+                </div>
+                
+                <h1 class="font-pixel text-3xl md:text-5xl lg:text-6xl mb-8 leading-relaxed tracking-wider">
+                    <span class="text-primary">IAN</span> <span class="text-gray-text">CHIOU</span>
+                </h1>
+                
+                <div class="h-12 md:h-16 flex items-center justify-center mb-8">
+                    <span id="typewriter" class="text-lg md:text-2xl text-neon-blue font-mono"></span>
+                    <span class="w-2 h-6 bg-primary ml-2 animate-blink"></span>
+                </div>
+                
+                <p class="text-gray-text text-base md:text-lg max-w-2xl mx-auto mb-12 font-mono">
+                    NANJING UNIVERSITY // DIGITAL ECONOMICS // FINTECH
+                </p>
+                
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="#machines" class="arcade-btn px-8 py-4 bg-primary text-deep-black font-bold rounded-lg hover:bg-primary-glow transition-all transform hover:scale-105">
+                        START GAME
+                    </a>
+                    <a href="#arcade" class="px-8 py-4 border-2 border-neon-blue text-neon-blue font-bold rounded-lg hover:bg-neon-blue/10 transition-all">
+                        FREE PLAY
+                    </a>
+                </div>
+                
+                <div class="mt-12 flex justify-center gap-8 text-xs font-mono text-gray-text">
+                    <span>1UP: <span class="text-neon-green">READY</span></span>
+                    <span>CREDITS: <span class="text-neon-yellow">∞</span></span>
+                    <span>WORLD: <span class="text-neon-pink">NJU-1</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Arcade Machines -->
+    <section id="machines" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-pixel text-2xl md:text-3xl mb-4">
+                    <span class="text-neon-pink">SELECT</span> <span class="text-cool-white">MACHINE</span>
+                </h2>
+                <p class="text-gray-text font-mono">选择一台游戏机开始游玩</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- FinAI Machine -->
+                <div class="arcade-machine group">
+                    <div class="machine-top">
+                        <div class="marquee-light"></div>
+                        <div class="marquee-text font-pixel text-xs text-center py-2">
+                            <span class="text-neon-yellow">★</span> FINAI <span class="text-neon-yellow">★</span> FINAI <span class="text-neon-yellow">★</span>
+                        </div>
+                    </div>
+                    <div class="machine-screen">
+                        <div class="screen-content p-6">
+                            <div class="text-5xl mb-4">🏦</div>
+                            <h3 class="font-pixel text-sm text-neon-blue mb-3">FINAI</h3>
+                            <p class="text-xs text-gray-text mb-4 leading-relaxed">
+                                金融 AI 平台<br/>
+                                Quant Trading System
+                            </p>
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="text-[10px] px-2 py-1 bg-neon-blue/20 rounded text-neon-blue">LLM</span>
+                                <span class="text-[10px] px-2 py-1 bg-neon-green/20 rounded text-neon-green">PYTHON</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="machine-controls">
+                        <a href="http://www.finai.org.cn/" target="_blank" class="start-btn block text-center py-3 bg-neon-green text-deep-black font-bold font-pixel text-xs rounded hover:bg-neon-green/80 transition-colors">
+                            PUSH START
+                        </a>
+                    </div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <!-- ianchiou28 Machine -->
+                <div class="arcade-machine group">
+                    <div class="machine-top">
+                        <div class="marquee-light"></div>
+                        <div class="marquee-text font-pixel text-xs text-center py-2">
+                            <span class="text-primary">★</span> OPEN SOURCE <span class="text-primary">★</span>
+                        </div>
+                    </div>
+                    <div class="machine-screen">
+                        <div class="screen-content p-6">
+                            <div class="text-5xl mb-4">👨‍💻</div>
+                            <h3 class="font-pixel text-sm text-primary mb-3">ianchiou28</h3>
+                            <p class="text-xs text-gray-text mb-4 leading-relaxed">
+                                个人开源项目<br/>
+                                Developer Portfolio
+                            </p>
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="text-[10px] px-2 py-1 bg-primary/20 rounded text-primary">REPOS</span>
+                                <span class="text-[10px] px-2 py-1 bg-neon-purple/20 rounded text-neon-purple">STARS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="machine-controls">
+                        <a href="https://github.com/ianchiou28" target="_blank" class="start-btn block text-center py-3 bg-primary text-deep-black font-bold font-pixel text-xs rounded hover:bg-primary-glow transition-colors">
+                            PUSH START
+                        </a>
+                    </div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <!-- Lingsio Machine -->
+                <div class="arcade-machine group">
+                    <div class="machine-top">
+                        <div class="marquee-light"></div>
+                        <div class="marquee-text font-pixel text-xs text-center py-2">
+                            <span class="text-neon-purple">★</span> ORG MODE <span class="text-neon-purple">★</span>
+                        </div>
+                    </div>
+                    <div class="machine-screen">
+                        <div class="screen-content p-6">
+                            <div class="text-5xl mb-4">🚀</div>
+                            <h3 class="font-pixel text-sm text-neon-purple mb-3">Lingsio</h3>
+                            <p class="text-xs text-gray-text mb-4 leading-relaxed">
+                                组织级项目<br/>
+                                Research Lab
+                            </p>
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="text-[10px] px-2 py-1 bg-neon-purple/20 rounded text-neon-purple">TEAM</span>
+                                <span class="text-[10px] px-2 py-1 bg-neon-yellow/20 rounded text-neon-yellow">COLLAB</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="machine-controls">
+                        <a href="https://github.com/Lingsio" target="_blank" class="start-btn block text-center py-3 bg-neon-purple text-deep-black font-bold font-pixel text-xs rounded hover:bg-neon-purple/80 transition-colors">
+                            PUSH START
+                        </a>
+                    </div>
+                    <div class="machine-base"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Player Stats -->
+    <section id="about" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-arcade rounded-3xl p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="font-pixel text-xl md:text-2xl mb-6">
+                            <span class="text-neon-green">PLAYER</span> <span class="text-cool-white">1</span>
+                        </h2>
+                        <div class="space-y-4 font-mono text-sm">
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-text">NAME</span>
+                                <span class="text-cool-white">Ian Chiou</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-text">GUILD</span>
+                                <span class="text-neon-blue">Nanjing University</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-text">CLASS</span>
+                                <span class="text-primary">Digital Economics</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-text">FOCUS</span>
+                                <span class="text-neon-pink">FinTech & Quant</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-text">EXP</span>
+                                <span class="text-neon-green">████████░░ 80%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h3 class="font-pixel text-xs text-gray-text mb-4">SKILL TREE</h3>
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="skill-node p-3 rounded-lg bg-neon-blue/10 border border-neon-blue/30 text-center">
+                                    <div class="text-lg mb-1">🐍</div>
+                                    <div class="text-[10px] text-neon-blue">Python</div>
+                                </div>
+                                <div class="skill-node p-3 rounded-lg bg-primary/10 border border-primary/30 text-center">
+                                    <div class="text-lg mb-1">📊</div>
+                                    <div class="text-[10px] text-primary">Quant</div>
+                                </div>
+                                <div class="skill-node p-3 rounded-lg bg-neon-green/10 border border-neon-green/30 text-center">
+                                    <div class="text-lg mb-1">⚛️</div>
+                                    <div class="text-[10px] text-neon-green">React</div>
+                                </div>
+                                <div class="skill-node p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/30 text-center">
+                                    <div class="text-lg mb-1">🧠</div>
+                                    <div class="text-[10px] text-neon-purple">AI</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="stats-monitor p-6 rounded-2xl bg-black/50 border border-neon-green/30">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-3 h-3 rounded-full bg-neon-green animate-pulse"></div>
+                                <span class="font-pixel text-xs text-neon-green">SYSTEM ONLINE</span>
+                            </div>
+                            <div class="space-y-3 font-mono text-xs">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-text w-20">GITHUB</span>
+                                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-neon-green rounded-full" style="width: 85%"></div>
+                                    </div>
+                                    <span class="text-neon-green">85</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-text w-20">FINANCE</span>
+                                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary rounded-full" style="width: 92%"></div>
+                                    </div>
+                                    <span class="text-primary">92</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-text w-20">CODE</span>
+                                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-neon-blue rounded-full" style="width: 78%"></div>
+                                    </div>
+                                    <span class="text-neon-blue">78</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-text w-20">DESIGN</span>
+                                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-neon-pink rounded-full" style="width: 70%"></div>
+                                    </div>
+                                    <span class="text-neon-pink">70</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-white/10">
+                                <div class="font-pixel text-[10px] text-gray-text mb-2">ACHIEVEMENTS</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-neon-yellow/20 border border-neon-yellow/50 rounded text-[10px] text-neon-yellow">🌱 FinAI Builder</span>
+                                    <span class="px-2 py-1 bg-neon-green/20 border border-neon-green/50 rounded text-[10px] text-neon-green">⭐ Open Sourcer</span>
+                                    <span class="px-2 py-1 bg-primary/20 border border-primary/50 rounded text-[10px] text-primary">🎓 NJU Student</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Slider - Memory Card -->
+    <section id="photos" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="font-pixel text-2xl md:text-3xl mb-4">
+                    <span class="text-neon-pink">MEMORY</span> <span class="text-cool-white">CARD</span>
+                </h2>
+                <p class="text-gray-text font-mono">滑动查看 / SWIPE TO VIEW</p>
+            </div>
+            
+            <!-- Photo Slider Container -->
+            <div class="photo-slider-container">
+                <div class="photo-slider" id="photo-slider">
+                    <!-- Photos will be loaded here by JavaScript -->
+                </div>
+                
+                <!-- Slider Controls -->
+                <button class="slider-btn slider-prev" id="slider-prev">◀</button>
+                <button class="slider-btn slider-next" id="slider-next">▶</button>
+            </div>
+            
+            <!-- Photo Counter -->
+            <div class="text-center mt-6">
+                <span class="font-pixel text-sm text-neon-pink">
+                    <span id="current-photo">1</span> / <span id="total-photos">6</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arcade Games Section -->
+    <section id="arcade" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-pixel text-2xl md:text-3xl mb-4">
+                    <span class="text-neon-yellow">GAME</span> <span class="text-cool-white">CENTER</span>
+                </h2>
+                <p class="text-gray-text font-mono">选择游戏开始游玩 / SELECT GAME</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Snake Game -->
+                <div class="game-select-card group cursor-pointer" onclick="startSnakeGame()">
+                    <div class="game-preview p-8 rounded-2xl bg-gradient-to-br from-neon-green/20 to-deep-black border-2 border-neon-green/50 group-hover:border-neon-green transition-all">
+                        <div class="text-6xl mb-4 text-center">🐍</div>
+                        <h3 class="font-pixel text-center text-neon-green mb-2">SNAKE</h3>
+                        <p class="text-xs text-gray-text text-center font-mono">经典贪吃蛇</p>
+                        <div class="mt-4 flex justify-center gap-2">
+                            <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
+                            <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse" style="animation-delay: 0.2s"></span>
+                            <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tetris Game -->
+                <div class="game-select-card group cursor-pointer" onclick="startTetrisGame()">
+                    <div class="game-preview p-8 rounded-2xl bg-gradient-to-br from-neon-blue/20 to-deep-black border-2 border-neon-blue/50 group-hover:border-neon-blue transition-all">
+                        <div class="text-6xl mb-4 text-center">🧱</div>
+                        <h3 class="font-pixel text-center text-neon-blue mb-2">TETRIS</h3>
+                        <p class="text-xs text-gray-text text-center font-mono">俄罗斯方块</p>
+                        <div class="mt-4 flex justify-center gap-2">
+                            <span class="w-2 h-2 bg-neon-blue rounded-full animate-pulse"></span>
+                            <span class="w-2 h-2 bg-neon-blue rounded-full animate-pulse" style="animation-delay: 0.2s"></span>
+                            <span class="w-2 h-2 bg-neon-blue rounded-full animate-pulse" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pacman Game -->
+                <div class="game-select-card group cursor-pointer" onclick="startPacmanGame()">
+                    <div class="game-preview p-8 rounded-2xl bg-gradient-to-br from-neon-yellow/20 to-deep-black border-2 border-neon-yellow/50 group-hover:border-neon-yellow transition-all">
+                        <div class="text-6xl mb-4 text-center">👾</div>
+                        <h3 class="font-pixel text-center text-neon-yellow mb-2">PACMAN</h3>
+                        <p class="text-xs text-gray-text text-center font-mono">吃豆人</p>
+                        <div class="mt-4 flex justify-center gap-2">
+                            <span class="w-2 h-2 bg-neon-yellow rounded-full animate-pulse"></span>
+                            <span class="w-2 h-2 bg-neon-yellow rounded-full animate-pulse" style="animation-delay: 0.2s"></span>
+                            <span class="w-2 h-2 bg-neon-yellow rounded-full animate-pulse" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Stats - Arcade Style -->
+    <section id="opensource" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="font-pixel text-xl md:text-2xl mb-4">
+                    <span class="text-neon-purple">HIGH</span> <span class="text-cool-white">SCORES</span>
+                </h2>
+            </div>
+            
+            <div class="glass-arcade rounded-3xl p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Player 1 Stats -->
+                    <div class="border border-neon-green/30 rounded-2xl p-6 bg-black/30">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-xl bg-neon-green/20 border-2 border-neon-green flex items-center justify-center">
+                                <span class="font-pixel text-neon-green text-xs">1UP</span>
+                            </div>
+                            <div>
+                                <h3 class="font-pixel text-sm text-cool-white">ianchiou28</h3>
+                                <p class="text-xs text-gray-text font-mono">PLAYER 1</p>
+                            </div>
+                        </div>
+                        <img src="https://github-readme-stats.vercel.app/api?username=ianchiou28&show_icons=true&theme=dark&hide_border=true&bg_color=0d1117&title_color=39ff14&text_color=8b949e&icon_color=39ff14" 
+                             alt="GitHub Stats" 
+                             class="w-full rounded-xl">
+                    </div>
+                    
+                    <!-- Player 2 Stats -->
+                    <div class="border border-neon-purple/30 rounded-2xl p-6 bg-black/30">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-xl bg-neon-purple/20 border-2 border-neon-purple flex items-center justify-center">
+                                <span class="font-pixel text-neon-purple text-xs">2UP</span>
+                            </div>
+                            <div>
+                                <h3 class="font-pixel text-sm text-cool-white">Lingsio</h3>
+                                <p class="text-xs text-gray-text font-mono">ORG MODE</p>
+                            </div>
+                        </div>
+                        <div class="h-48 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="font-pixel text-4xl text-neon-purple mb-4">🌟</div>
+                                <p class="text-gray-text text-sm mb-2">ORGANIZATION</p>
+                                <p class="text-cool-white font-bold">FINANCIAL TECH</p>
+                                <a href="https://github.com/Lingsio" target="_blank" class="inline-block mt-4 px-6 py-2 rounded-lg border border-neon-purple text-neon-purple text-sm hover:bg-neon-purple/10 transition-colors font-mono">
+                                    JOIN →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact - Game Over / Continue Screen -->
+    <section id="contact" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-pixel text-xl md:text-2xl mb-8">
+                <span class="text-neon-pink">CONTINUE?</span>
+            </h2>
+            
+            <div class="flex justify-center gap-4 mb-12">
+                <a href="https://github.com/ianchiou28" target="_blank" class="social-coin w-16 h-16 rounded-full border-2 border-neon-green flex items-center justify-center text-2xl hover:bg-neon-green/20 transition-all hover:scale-110">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.67-.3-5.46-1.335-5.46-5.925 0-1.11.38-2.71-.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 0z"/></svg>
+                </a>
+                <a href="https://github.com/Lingsio" target="_blank" class="social-coin w-16 h-16 rounded-full border-2 border-neon-purple flex items-center justify-center text-2xl hover:bg-neon-purple/20 transition-all hover:scale-110">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+                </a>
+            </div>
+            
+            <div class="font-pixel text-xs text-gray-text animate-pulse">
+                PRESS START TO CONNECT
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 border-t border-white/5">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="font-mono text-xs text-gray-text">
+                © 2024 IAN CHIOU. GAME OVER.
+            </p>
+            <p class="font-mono text-xs">
+                <span class="text-neon-green">CREDITS: 01</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Game Canvas Overlay -->
+    <canvas id="game-canvas" class="fixed inset-0 z-[100] hidden"></canvas>
+    
+    <!-- Game UI -->
+    <div id="game-ui" class="fixed top-20 right-6 z-[101] hidden flex-col items-end gap-2">
+        <div class="glass-arcade rounded-xl px-4 py-2">
+            <span class="font-pixel text-xs text-neon-green">SCORE: </span>
+            <span id="game-score" class="font-pixel text-lg text-neon-green">0</span>
+        </div>
+        <div class="glass-arcade rounded-xl px-4 py-2">
+            <span class="font-pixel text-xs text-gray-text">LEVEL: </span>
+            <span id="game-level" class="font-pixel text-lg text-neon-yellow">1</span>
+        </div>
+        <button id="exit-game" class="glass-arcade rounded-lg px-4 py-2 text-xs text-neon-pink hover:bg-neon-pink/20 transition-colors font-pixel">
+            EXIT [ESC]
+        </button>
+    </div>
+
+    <!-- Game Instructions Overlay -->
+    <div id="game-instructions" class="fixed inset-0 z-[102] hidden items-center justify-center bg-black/90 backdrop-blur-sm">
+        <div class="glass-arcade rounded-3xl p-8 max-w-md text-center">
+            <div id="game-icon" class="text-6xl mb-4"></div>
+            <h3 id="game-title" class="font-pixel text-xl mb-4 text-cool-white"></h3>
+            <p id="game-desc" class="text-gray-text text-sm mb-6 font-mono"></p>
+            <div id="game-controls" class="text-xs text-gray-text mb-6 font-mono space-y-1"></div>
+            <button id="start-game-btn" class="arcade-btn px-8 py-3 bg-primary text-deep-black font-bold rounded-lg font-pixel text-xs hover:bg-primary-glow transition-all">
+                START GAME
+            </button>
+        </div>
+    </div>
+
+    <!-- Terminal Modal -->
+    <div id="terminal-modal" class="fixed inset-0 z-[103] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="terminal-overlay"></div>
+        <div class="absolute inset-4 md:inset-20 bg-arcade-dark border-2 border-neon-green/30 rounded-2xl overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between px-4 py-3 bg-black/50 border-b border-neon-green/30">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-neon-pink"></div>
+                    <div class="w-3 h-3 rounded-full bg-neon-yellow"></div>
+                    <div class="w-3 h-3 rounded-full bg-neon-green"></div>
+                </div>
+                <span class="text-xs text-neon-green font-mono">ARCADE TERMINAL v2.0</span>
+                <button id="close-terminal" class="text-gray-text hover:text-neon-pink">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="terminal-body" class="flex-1 p-4 font-mono text-sm overflow-y-auto">
+                <div class="text-neon-green mb-2">欢迎进入游戏厅终端</div>
+                <div class="text-gray-text mb-4">输入 'help' 查看可用命令，输入游戏名启动游戏</div>
+                <div id="terminal-output"></div>
+                <div class="flex items-center mt-2">
+                    <span class="text-neon-pink mr-2">➜</span>
+                    <span class="text-neon-yellow mr-2">~</span>
+                    <input type="text" id="terminal-input" class="flex-1 bg-transparent outline-none text-cool-white" autofocus autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Button -->
+    <button id="terminal-btn" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-arcade flex items-center justify-center text-neon-green hover:scale-110 transition-transform z-40" title="打开终端 [ ` ]">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h7M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+    </button>
+
+    <script src="main.js"></script>
+</body>
+</html>
